@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobHunter-AI | Autonomous Job Search, Auto-Apply & Adaptive Learning Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col">
+
+  <!-- Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-robot text-slate-950 text-lg font-bold"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">JobHunter-AI</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold uppercase tracking-wider">v2.0 Autonomous</span>
+          </div>
+          <p class="text-xs text-slate-400">Search &bull; Auto-Apply &bull; Callback Predictor &bull; Adaptive Feedback Loop</p>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="hidden md:flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <button onclick="navSwitch('jobs')" id="navBtnJobs" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Job Radar</span>
+        </button>
+        <button onclick="navSwitch('tracker')" id="navBtnTracker" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Applications Tracker</span>
+        </button>
+        <button onclick="navSwitch('adaptive')" id="navBtnAdaptive" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-brain text-purple-400"></i>
+          <span>Adaptive Brain & Sprints</span>
+        </button>
+        <button onclick="navSwitch('studio')" id="navBtnStudio" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-file-lines text-teal-400"></i>
+          <span>ATS Studio</span>
+        </button>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <a href="https://github.com/Aladdu" target="_blank" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs border border-slate-700 transition">
+          <i class="fa-brands fa-github text-sm"></i>
+          <span>@Aladdu</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Sub-bar -->
+  <div class="md:hidden flex overflow-x-auto p-2 bg-slate-900 border-b border-slate-800 space-x-2 text-xs">
+    <button onclick="navSwitch('jobs')" class="px-3 py-1 rounded bg-slate-800 text-emerald-400 font-semibold">Job Radar</button>
+    <button onclick="navSwitch('tracker')" class="px-3 py-1 rounded bg-slate-800 text-slate-300">Applications</button>
+    <button onclick="navSwitch('adaptive')" class="px-3 py-1 rounded bg-slate-800 text-slate-300">Adaptive Brain</button>
+    <button onclick="navSwitch('studio')" class="px-3 py-1 rounded bg-slate-800 text-slate-300">ATS Studio</button>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- SECTION 1: JOB RADAR & DISCOVERY -->
+    <div id="sectionJobs" class="space-y-6">
+      <div class="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center space-x-3 mb-1">
+            <h1 class="text-2xl font-bold text-white">Autonomous Job Radar</h1>
+            <span class="text-xs font-semibold px-2.5 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded-full">Live Matching Feed</span>
+          </div>
+          <p class="text-slate-400 text-sm max-w-2xl">
+            Continuously scans tech roles for <strong class="text-slate-200">Ajay Avunoori</strong> (Java, Spring Boot, React, MySQL). Evaluates JD requirements, predicts your exact <strong>Company Callback Probability %</strong>, and allows 1-click tailored application dispatch.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="openAddJobModal()" class="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center space-x-2 transition">
+            <i class="fa-solid fa-plus text-emerald-400"></i>
+            <span>Add Custom JD</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-500 text-xs"></i>
+          <input id="jobSearchQuery" type="text" placeholder="Search by role, company, or tech stack (e.g. Java, Microservices)..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500/50" oninput="filterJobs()">
+        </div>
+        <div class="sm:w-64">
+          <select id="locationFilter" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50" onchange="filterJobs()">
+            <option value="">All Locations (Hyderabad, Remote, BLR)</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Remote">Remote</option>
+            <option value="Bengaluru">Bengaluru</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Job Cards Grid -->
+      <div id="jobsList" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- SECTION 2: APPLICATION TRACKER & OUTCOME LOGGING -->
+    <div id="sectionTracker" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white mb-1">Active Applications Pipeline</h2>
+          <p class="text-slate-400 text-xs">
+            Track every job you applied to. When a company responds or rejects, <strong>log the outcome below</strong> so the agent analyzes why and automatically creates new improvement plans.
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-center px-3 py-1 bg-slate-950 rounded-lg border border-slate-800">
+            <span id="statAppliedCount" class="text-base font-bold text-slate-100">0</span>
+            <p class="text-[10px] text-slate-400">Total Applied</p>
+          </div>
+          <div class="text-center px-3 py-1 bg-slate-950 rounded-lg border border-slate-800">
+            <span id="statInterviewCount" class="text-base font-bold text-emerald-400">0</span>
+            <p class="text-[10px] text-slate-400">Interviews</p>
+          </div>
+          <div class="text-center px-3 py-1 bg-slate-950 rounded-lg border border-slate-800">
+            <span id="statRejectionCount" class="text-base font-bold text-rose-400">0</span>
+            <p class="text-[10px] text-slate-400">Rejections</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applications Table / Cards -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div id="applicationsContainer" class="divide-y divide-slate-800">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: ADAPTIVE BRAIN & DYNAMIC LEARNING PLANS -->
+    <div id="sectionAdaptive" class="hidden space-y-6">
+      
+      <!-- High Level Insights Banner -->
+      <div class="bg-gradient-to-r from-purple-950/40 via-slate-900 to-indigo-950/40 border border-purple-800/40 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">
+            <i class="fa-solid fa-brain text-lg"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-white">Agentic Learning & Strategic Adaptation</h2>
+            <p class="text-xs text-purple-300">Continuous feedback synthesis based on company replies, ATS filters, and interview outcomes.</p>
+          </div>
+        </div>
+        <p id="agentVerdictText" class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+          Loading learning synthesis...
+        </p>
+      </div>
+
+      <!-- Identified Bottlenecks vs Working Strengths -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+          <h3 class="text-sm font-bold text-rose-400 flex items-center space-x-2">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Primary Bottlenecks Causing Rejections</span>
+          </h3>
+          <p class="text-xs text-slate-400">Identified from rejection notes and unmatched JD filters:</p>
+          <div id="bottlenecksList" class="flex flex-wrap gap-2 pt-1"></div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+          <h3 class="text-sm font-bold text-emerald-400 flex items-center space-x-2">
+            <i class="fa-solid fa-shield-check"></i>
+            <span>Proven Strengths Driving Interview Callbacks</span>
+          </h3>
+          <p class="text-xs text-slate-400">What hiring managers love about your current profile:</p>
+          <ul id="strengthsList" class="space-y-2 text-xs text-slate-300"></ul>
+        </div>
+
+      </div>
+
+      <!-- Dynamic Action Sprints -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-bold text-slate-100 flex items-center space-x-2">
+            <i class="fa-solid fa-fire text-amber-400"></i>
+            <span>Agent-Generated Action Plans & Sprints</span>
+          </h3>
+          <span class="text-xs text-slate-400">Updated automatically whenever you log an outcome</span>
+        </div>
+        <div id="actionPlansList" class="space-y-4">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECTION 4: ATS RESUME OPTIMIZATION STUDIO (Original Deep Workspace) -->
+    <div id="sectionStudio" class="hidden space-y-6">
+      
+      <!-- Dual Input Workspace -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: Candidate Profile -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-file-lines text-emerald-400"></i>
+              <h2 class="text-base font-semibold text-slate-200">Current Resume / Profile</h2>
+            </div>
+            <button onclick="loadAjayProfile()" class="text-xs text-emerald-400 hover:underline">Reset Ajay Profile</button>
+          </div>
+          <div class="flex-1">
+            <textarea id="resumeInput" class="w-full h-72 bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none leading-relaxed"></textarea>
+          </div>
+        </div>
+
+        <!-- Right: Target JD -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-crosshairs text-teal-400"></i>
+              <h2 class="text-base font-semibold text-slate-200">Target Job Description</h2>
+            </div>
+            <span class="text-xs text-slate-400">Custom JD Editor</span>
+          </div>
+          <div class="flex-1">
+            <textarea id="jdInput" class="w-full h-72 bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500/50 resize-none leading-relaxed" placeholder="Paste custom Job Description here..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Bar -->
+      <div class="flex flex-wrap items-center justify-center gap-4 py-2">
+        <button onclick="runAnalysis()" id="btnAnalyze" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold border border-slate-700 flex items-center space-x-2 transition shadow-lg">
+          <i class="fa-solid fa-chart-pie text-emerald-400"></i>
+          <span>Run ATS Diagnostics</span>
+        </button>
+        <button onclick="runTailoring()" id="btnTailor" class="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold flex items-center space-x-3 transition shadow-xl shadow-emerald-500/20">
+          <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+          <span>Tailor Resume & Calculate Callback Probability</span>
+        </button>
+      </div>
+
+      <!-- Studio Output View -->
+      <div id="studioResults" class="hidden space-y-6">
+        
+        <!-- Score Highlights -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col items-center justify-center text-center">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-2">ATS Match Score</span>
+            <span id="studioAtsScore" class="text-4xl font-extrabold text-emerald-400">0%</span>
+            <span id="studioAtsRating" class="text-xs text-slate-400 mt-1 font-medium">Evaluating</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col items-center justify-center text-center">
+            <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-2">Predicted Callback Rate</span>
+            <span id="studioCallbackProb" class="text-4xl font-extrabold text-teal-300">0%</span>
+            <span id="studioCallbackTier" class="text-xs text-teal-400 mt-1 font-medium">Moderate</span>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-center space-y-2">
+            <span class="text-xs font-semibold text-slate-300">Export Options</span>
+            <button onclick="downloadDocx()" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-file-word"></i>
+              <span>Download ATS Word (.docx)</span>
+            </button>
+            <button onclick="copyMarkdown()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-medium transition flex items-center justify-center space-x-2">
+              <i class="fa-regular fa-copy"></i>
+              <span>Copy Markdown Resume</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Before / After Diff -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <h3 class="text-sm font-bold text-slate-200">Google XYZ Bullet Transformations</h3>
+          <div id="bulletDiffContainer" class="space-y-3"></div>
+        </div>
+
+        <!-- Markdown Output -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+          <h3 class="text-sm font-bold text-slate-200">Tailored Resume Preview</h3>
+          <pre id="markdownOutput" class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-slate-300 whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto"></pre>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Modal for Logging Outcome / Feedback -->
+  <div id="feedbackModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-pen-to-square text-emerald-400"></i>
+          <span>Log Company Response / Outcome</span>
+        </h3>
+        <button onclick="closeFeedbackModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <input type="hidden" id="modalAppId">
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">Company / Role</label>
+        <div id="modalAppTitle" class="text-sm font-bold text-slate-100"></div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">Status / Result</label>
+        <select id="modalStatusSelect" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200">
+          <option value="Interview Scheduled">Interview Scheduled 🎉</option>
+          <option value="Rejected">Rejected after Resume Screen ❌</option>
+          <option value="Rejected (Tech Round)">Rejected after Technical Round ❌</option>
+          <option value="Ghosted (No Reply)">Ghosted / No Reply after 10+ days ⏳</option>
+          <option value="Offer Extended">Offer Extended! 🏆</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">Feedback / Recruiter Notes (Why?)</label>
+        <textarea id="modalNotesInput" class="w-full h-24 bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-emerald-500" placeholder="e.g. Recruiter stated they prioritized candidates with Kafka & Docker; liked my ATM project ACID transactions."></textarea>
+      </div>
+      <div class="flex items-center justify-end space-x-3 pt-2">
+        <button onclick="closeFeedbackModal()" class="px-4 py-2 text-xs rounded-lg bg-slate-800 text-slate-300">Cancel</button>
+        <button onclick="saveFeedback()" class="px-5 py-2 text-xs font-bold rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950">
+          Update Outcome & Regenerate Plans
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Adding Custom Job -->
+  <div id="addJobModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white">Add New Job to Radar</h3>
+        <button onclick="closeAddJobModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-[10px] text-slate-400 block mb-1">Company</label>
+          <input id="newJobCompany" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs" placeholder="e.g. Wipro / Amazon">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block mb-1">Role Title</label>
+          <input id="newJobTitle" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs" placeholder="e.g. Java Backend Engineer">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-[10px] text-slate-400 block mb-1">Location</label>
+          <input id="newJobLocation" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs" placeholder="e.g. Hyderabad / Remote">
+        </div>
+        <div>
+          <label class="text-[10px] text-slate-400 block mb-1">Salary Range</label>
+          <input id="newJobSalary" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs" placeholder="e.g. ₹8 - ₹14 LPA">
+        </div>
+      </div>
+      <div>
+        <label class="text-[10px] text-slate-400 block mb-1">Full Job Description (JD)</label>
+        <textarea id="newJobDesc" class="w-full h-32 bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs" placeholder="Paste full JD text..."></textarea>
+      </div>
+      <div class="flex justify-end space-x-3 pt-2">
+        <button onclick="closeAddJobModal()" class="px-4 py-2 text-xs rounded-lg bg-slate-800 text-slate-300">Cancel</button>
+        <button onclick="submitNewJob()" class="px-5 py-2 text-xs font-bold rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950">Add to Radar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Application Controller -->
+  <script>
+    let defaultData = null;
+    let allJobs = [];
+    let currentTailoredData = null;
+
+    async function init() {
+      await loadDefaults();
+      await fetchJobs();
+      await fetchApplications();
+      await fetchAdaptiveInsights();
+    }
+
+    async function loadDefaults() {
+      try {
+        const res = await fetch('/api/defaults');
+        defaultData = await res.json();
+        loadAjayProfile();
+        if (defaultData.sample_jds && defaultData.sample_jds.length > 0) {
+          document.getElementById('jdInput').value = defaultData.sample_jds[0].description;
+        }
+      } catch (e) {
+        console.error("Defaults load error", e);
+      }
+    }
+
+    function loadAjayProfile() {
+      if (defaultData && defaultData.profile) {
+        document.getElementById('resumeInput').value = defaultData.profile.raw_resume;
+      }
+    }
+
+    function navSwitch(view) {
+      document.getElementById('sectionJobs').classList.add('hidden');
+      document.getElementById('sectionTracker').classList.add('hidden');
+      document.getElementById('sectionAdaptive').classList.add('hidden');
+      document.getElementById('sectionStudio').classList.add('hidden');
+
+      const tabs = ['Jobs', 'Tracker', 'Adaptive', 'Studio'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('navBtn' + t);
+        if (btn) btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center space-x-1.5 transition";
+      });
+
+      if (view === 'jobs') {
+        document.getElementById('sectionJobs').classList.remove('hidden');
+        document.getElementById('navBtnJobs').className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1.5 transition";
+      } else if (view === 'tracker') {
+        document.getElementById('sectionTracker').classList.remove('hidden');
+        document.getElementById('navBtnTracker').className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1.5 transition";
+        fetchApplications();
+      } else if (view === 'adaptive') {
+        document.getElementById('sectionAdaptive').classList.remove('hidden');
+        document.getElementById('navBtnAdaptive').className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/30 flex items-center space-x-1.5 transition";
+        fetchAdaptiveInsights();
+      } else if (view === 'studio') {
+        document.getElementById('sectionStudio').classList.remove('hidden');
+        document.getElementById('navBtnStudio').className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-500/10 text-teal-400 border border-teal-500/30 flex items-center space-x-1.5 transition";
+      }
+    }
+
+    async function fetchJobs() {
+      try {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        allJobs = data.jobs;
+        renderJobs(allJobs);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function filterJobs() {
+      const q = document.getElementById('jobSearchQuery').value.toLowerCase();
+      const loc = document.getElementById('locationFilter').value.toLowerCase();
+      const filtered = allJobs.filter(j => {
+        const matchQ = !q || (j.title + " " + j.company + " " + j.tags.join(" ")).toLowerCase().includes(q);
+        const matchLoc = !loc || j.location.toLowerCase().includes(loc);
+        return matchQ && matchLoc;
+      });
+      renderJobs(filtered);
+    }
+
+    function renderJobs(jobs) {
+      const container = document.getElementById('jobsList');
+      if (!jobs || jobs.length === 0) {
+        container.innerHTML = `<div class="col-span-2 p-8 text-center text-slate-500 text-xs">No jobs matched your query.</div>`;
+        return;
+      }
+
+      container.innerHTML = jobs.map(j => {
+        const prob = j.callback_probability;
+        const probColor = prob >= 75 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' : 
+                          prob >= 50 ? 'text-teal-300 bg-teal-500/10 border-teal-500/30' : 'text-rose-400 bg-rose-500/10 border-rose-500/30';
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-slate-700 transition flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <span class="text-xs text-slate-400 font-semibold">${j.company}</span>
+                  <h3 class="text-base font-bold text-white">${j.title}</h3>
+                </div>
+                <div class="text-right">
+                  <div class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${probColor}">
+                    ${prob}% Callback Prob
+                  </div>
+                  <span class="text-[10px] text-slate-400 font-medium">ATS Match: ${j.ats_score}%</span>
+                </div>
+              </div>
+
+              <div class="flex items-center space-x-3 text-xs text-slate-400 pt-1">
+                <span><i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i>${j.location}</span>
+                <span><i class="fa-solid fa-briefcase text-teal-400 mr-1"></i>${j.experience}</span>
+                <span><i class="fa-solid fa-indian-rupee-sign text-cyan-400 mr-1"></i>${j.salary_range}</span>
+              </div>
+
+              <div class="flex flex-wrap gap-1.5 pt-2">
+                ${j.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded bg-slate-950 text-slate-300 border border-slate-800">${t}</span>`).join('')}
+              </div>
+
+              <p class="text-xs text-slate-300 line-clamp-3 leading-relaxed pt-1">${j.description}</p>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+              <span class="text-[10px] text-slate-400">${j.callback_summary}</span>
+              <button onclick="autoApply('${j.id}')" id="btnApply_${j.id}" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold rounded-xl text-xs flex items-center space-x-1.5 transition shadow">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>Auto-Apply (XYZ)</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function autoApply(jobId) {
+      const btn = document.getElementById('btnApply_' + jobId);
+      if (btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Applying...</span>`;
+
+      try {
+        const res = await fetch('/api/jobs/apply', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ job_id: jobId })
+        });
+        const data = await res.json();
+        alert(`Application Dispatched for ${data.application.company}!\n\nATS Score: ${data.tailored_ats_score}%\nPredicted Callback: ${data.callback_probability}%\nCover letter & tailored resume logged in Active Applications.`);
+        await fetchApplications();
+        navSwitch('tracker');
+      } catch (e) {
+        alert("Error applying: " + e.message);
+      } finally {
+        if (btn) btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>Auto-Apply (XYZ)</span>`;
+      }
+    }
+
+    async function fetchApplications() {
+      try {
+        const res = await fetch('/api/applications');
+        const data = await res.json();
+        renderApplications(data.applications);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function renderApplications(apps) {
+      const container = document.getElementById('applicationsContainer');
+      const total = apps.length;
+      const interviews = apps.filter(a => a.status.includes('Interview') || a.status.includes('Offer')).length;
+      const rejections = apps.filter(a => a.status.includes('Rejected')).length;
+
+      document.getElementById('statAppliedCount').innerText = total;
+      document.getElementById('statInterviewCount').innerText = interviews;
+      document.getElementById('statRejectionCount').innerText = rejections;
+
+      if (!apps || apps.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-500 text-xs">No applications registered yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = apps.map(a => {
+        const statusColor = a.status.includes('Interview') || a.status.includes('Offer') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
+                            a.status.includes('Rejected') ? 'bg-rose-500/10 text-rose-400 border-rose-500/30' : 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+
+        return `
+          <div class="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-bold text-slate-400">${a.company}</span>
+                <span class="text-xs text-slate-600">&bull;</span>
+                <span class="text-xs text-slate-400">${a.applied_date}</span>
+              </div>
+              <h4 class="text-sm font-bold text-white">${a.title}</h4>
+              <p class="text-xs text-slate-400 italic">"${a.user_notes || 'No feedback logged yet.'}"</p>
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <div class="text-right">
+                <span class="text-[10px] text-slate-400 block">Predicted Callback</span>
+                <span class="text-xs font-extrabold text-teal-400">${a.predicted_callback}%</span>
+              </div>
+              <span class="px-2.5 py-1 text-xs font-semibold rounded-full border ${statusColor}">
+                ${a.status}
+              </span>
+              <button onclick="openFeedbackModal('${a.id}', '${a.company} - ${a.title}', '${a.status}', '${(a.user_notes||'').replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-medium transition">
+                <i class="fa-solid fa-pen text-emerald-400 mr-1"></i> Update Result
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function fetchAdaptiveInsights() {
+      try {
+        const res = await fetch('/api/agent/insights');
+        const data = await res.json();
+        
+        document.getElementById('agentVerdictText').innerText = data.agent_verdict || "Analyzing application trends...";
+        
+        // Bottlenecks
+        document.getElementById('bottlenecksList').innerHTML = data.identified_bottlenecks.map(b => 
+          `<span class="px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 text-xs font-semibold">${b}</span>`
+        ).join('');
+
+        // Strengths
+        document.getElementById('strengthsList').innerHTML = data.strengths.map(s => 
+          `<li class="flex items-start space-x-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 text-xs"></i><span>${s}</span></li>`
+        ).join('');
+
+        // Action Sprints
+        document.getElementById('actionPlansList').innerHTML = data.action_plans.map(p => `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-white flex items-center space-x-2">
+                <i class="fa-solid fa-bullseye text-teal-400"></i>
+                <span>${p.title}</span>
+              </h4>
+              <span class="text-[10px] px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded font-semibold uppercase">${p.urgency}</span>
+            </div>
+            <p class="text-xs text-slate-400">${p.why}</p>
+            <div class="space-y-1.5 pt-1 pl-4 border-l-2 border-slate-800">
+              ${p.action_steps.map(step => `<p class="text-xs text-slate-300 font-mono"><span class="text-emerald-400 mr-2">&bull;</span>${step}</p>`).join('')}
+            </div>
+          </div>
+        `).join('');
+
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function openFeedbackModal(appId, title, currentStatus, currentNotes) {
+      document.getElementById('modalAppId').value = appId;
+      document.getElementById('modalAppTitle').innerText = title;
+      document.getElementById('modalStatusSelect').value = currentStatus;
+      document.getElementById('modalNotesInput').value = currentNotes;
+      document.getElementById('feedbackModal').classList.remove('hidden');
+    }
+
+    function closeFeedbackModal() {
+      document.getElementById('feedbackModal').classList.add('hidden');
+    }
+
+    async function saveFeedback() {
+      const appId = document.getElementById('modalAppId').value;
+      const status = document.getElementById('modalStatusSelect').value;
+      const notes = document.getElementById('modalNotesInput').value;
+
+      try {
+        const res = await fetch('/api/applications/feedback', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ app_id: appId, status: status, user_notes: notes })
+        });
+        const data = await res.json();
+        closeFeedbackModal();
+        await fetchApplications();
+        await fetchAdaptiveInsights();
+        alert("Outcome logged! Adaptive Brain has updated your action plans.");
+        navSwitch('adaptive');
+      } catch (e) {
+        alert("Failed to update feedback: " + e.message);
+      }
+    }
+
+    function openAddJobModal() {
+      document.getElementById('addJobModal').classList.remove('hidden');
+    }
+    function closeAddJobModal() {
+      document.getElementById('addJobModal').classList.add('hidden');
+    }
+
+    async function submitNewJob() {
+      const company = document.getElementById('newJobCompany').value;
+      const title = document.getElementById('newJobTitle').value;
+      const location = document.getElementById('newJobLocation').value;
+      const salary = document.getElementById('newJobSalary').value;
+      const desc = document.getElementById('newJobDesc').value;
+
+      if (!company || !title || !desc) {
+        alert("Company, Title, and Description are required.");
+        return;
+      }
+
+      try {
+        await fetch('/api/jobs/add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            company: company,
+            title: title,
+            location: location || "Hyderabad",
+            experience: "0-3 Years",
+            salary_range: salary || "Competitive",
+            tags: ["Java", "Full Stack"],
+            description: desc
+          })
+        });
+        closeAddJobModal();
+        await fetchJobs();
+        alert("New job added to Radar!");
+      } catch (e) {
+        alert("Failed to add job: " + e.message);
+      }
+    }
+
+    async function runAnalysis() {
+      const resume = document.getElementById('resumeInput').value;
+      const jd = document.getElementById('jdInput').value;
+      try {
+        const res = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({resume_text: resume, jd_text: jd})
+        });
+        const data = await res.json();
+        document.getElementById('studioAtsScore').innerText = `${data.overall_score}%`;
+        document.getElementById('studioAtsRating').innerText = data.rating;
+        document.getElementById('studioCallbackProb').innerText = `${data.callback_prediction.callback_probability}%`;
+        document.getElementById('studioCallbackTier').innerText = data.callback_prediction.tier;
+        document.getElementById('studioResults').classList.remove('hidden');
+      } catch (e) {
+        alert("Error: " + e.message);
+      }
+    }
+
+    async function runTailoring() {
+      const resume = document.getElementById('resumeInput').value;
+      const jd = document.getElementById('jdInput').value;
+      try {
+        const res = await fetch('/api/tailor', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({resume_text: resume, jd_text: jd, profile: defaultData.profile})
+        });
+        currentTailoredData = await res.json();
+        document.getElementById('studioAtsScore').innerText = `${currentTailoredData.tailored_report.overall_score}%`;
+        document.getElementById('studioAtsRating').innerText = currentTailoredData.tailored_report.rating;
+        document.getElementById('studioCallbackProb').innerText = `${currentTailoredData.callback_prediction.callback_probability}%`;
+        document.getElementById('studioCallbackTier').innerText = currentTailoredData.callback_prediction.tier;
+        document.getElementById('markdownOutput').innerText = currentTailoredData.markdown_resume;
+
+        const diffContainer = document.getElementById('bulletDiffContainer');
+        diffContainer.innerHTML = currentTailoredData.optimized_bullets.map(b => `
+          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
+            <p class="text-xs text-rose-400 line-through">${b.original}</p>
+            <p class="text-xs text-emerald-400 font-medium">${b.optimized}</p>
+          </div>
+        `).join('');
+
+        document.getElementById('studioResults').classList.remove('hidden');
+      } catch (e) {
+        alert("Error: " + e.message);
+      }
+    }
+
+    function copyMarkdown() {
+      if (!currentTailoredData) return;
+      navigator.clipboard.writeText(currentTailoredData.markdown_resume);
+      alert("Copied to clipboard!");
+    }
+
+    async function downloadDocx() {
+      const resume = document.getElementById('resumeInput').value;
+      const jd = document.getElementById('jdInput').value;
+      const res = await fetch('/api/export-docx', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({resume_text: resume, jd_text: jd, profile: defaultData.profile})
+      });
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "Ajay_Avunoori_ATS_Tailored_Resume.docx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
